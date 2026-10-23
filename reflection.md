@@ -1,0 +1,7 @@
+# Reflection (draft, 150–250 words)
+
+The first weakness I wanted to prevent was an agent starting the calculation even when one required input was missing. The public T2 prompt omits switching frequency, and a superficially helpful assistant might silently assume a common value such as 100 kHz. That would make the result look plausible but would violate the assignment's central requirement. I changed the skill to put completeness checking first, require the agent to list missing fields, and explicitly prohibit defaults or calculations until the inputs are complete.
+
+I also separated natural-language instructions from the numerical calculation. `SKILL.md` defines the order of operations and stop rules, while `design_buck.py` performs deterministic validation, sizing, and plotting. This makes the arithmetic repeatable and easier to compare against a hand calculation. The script checks impossible buck-converter ranges, invalid ripple ratios, reversed ranges, and disagreement between voltage and power endpoints.
+
+The test set includes the three public cases plus two additional failure cases. These test not only whether the skill can produce a number, but whether it refuses to produce one when the specification is incomplete or inconsistent. T1's hand calculation gives 75 µH and 12.5 µF, with the 6 V endpoint limiting both requirements. The remaining limitation is that the model is ideal: real component tolerances, losses, ESR/ESL, thermal limits, and transient behavior would need separate engineering checks.
