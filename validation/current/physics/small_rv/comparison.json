@@ -1,0 +1,100 @@
+{
+  "inputs": {
+    "Vin": 24,
+    "R": 3,
+    "Vo_min": 6,
+    "Vo_max": 12,
+    "fsw": 100000,
+    "rL": 0.3,
+    "rv": 0.001
+  },
+  "L_H": 7.5e-05,
+  "C_F": 0.00012500000000000003,
+  "method": "periodic affine matrix exponential + coupled switched ODE DOP853 + derivative-root extrema",
+  "limits": "ideal fixed-duty CCM candidate only; no DCM, control loop, parasitics or hardware validation",
+  "model_assessment": {
+    "model": "small-ripple CCM approximation; not the full switched-circuit solution",
+    "status": "screening_passed_not_validated",
+    "Zc_over_R_at_fsw": 0.004244131815783874,
+    "max_predicted_rv": 0.0009999999999999998,
+    "max_ripple_over_nominal_inductor_drive": 0.0009999999999999998,
+    "screening_thresholds": {
+      "rv_pp": 0.05,
+      "Zc_over_R": 0.1,
+      "ripple_over_drive": 0.1,
+      "rL_near_CCM": 1.8
+    },
+    "threshold_basis": "project screening heuristics, not manufacturer guarantees or universal error bounds",
+    "warnings": []
+  },
+  "points": [
+    {
+      "Vo_V": 6,
+      "formula": {
+        "Vo": 6,
+        "D": 0.25,
+        "Io": 2.0,
+        "dIL": 0.6000000000000001,
+        "C_required": 0.00012500000000000003,
+        "rL_actual": 0.30000000000000004,
+        "dVo": 0.005999999999999999,
+        "rv_actual": 0.0009999999999999998,
+        "P": 12.0
+      },
+      "coupled_CCM_candidate": {
+        "mean_i_A": 1.9999999999999916,
+        "mean_v_V": 5.999999999999992,
+        "dIL_A": 0.6001000228200013,
+        "dVo_V": 0.006001535571601657,
+        "min_i_A": 1.6999501738722782,
+        "rL": 0.3000500114100019,
+        "rv": 0.0010002559286002774,
+        "positive_valley": true,
+        "periodic_residual_scaled": 1.1842378929335002e-15,
+        "mean_v_relative_error": 1.3322676295501878e-15
+      },
+      "reference_valid_for_diode_buck": true,
+      "signed_relative_difference_reference_minus_formula": {
+        "dIL_A": 0.00016670470000201829,
+        "dVo_V": 0.0002559286002763208
+      },
+      "tight_tolerance_relative_change_max": 4.4397558380014665e-13,
+      "exceeds_requested_rL": true,
+      "exceeds_requested_rv": true
+    },
+    {
+      "Vo_V": 12,
+      "formula": {
+        "Vo": 12,
+        "D": 0.5,
+        "Io": 4.0,
+        "dIL": 0.8,
+        "C_required": 8.333333333333334e-05,
+        "rL_actual": 0.2,
+        "dVo": 0.007999999999999998,
+        "rv_actual": 0.0006666666666666665,
+        "P": 48.0
+      },
+      "coupled_CCM_candidate": {
+        "mean_i_A": 3.999999999999988,
+        "mean_v_V": 11.999999999999993,
+        "dIL_A": 0.8001778220349873,
+        "dVo_V": 0.008002163514914784,
+        "min_i_A": 3.599911088982493,
+        "rL": 0.20004445550874744,
+        "rv": 0.0006668469595762324,
+        "positive_valley": true,
+        "periodic_residual_scaled": 8.881784197001252e-16,
+        "mean_v_relative_error": 5.921189464667501e-16
+      },
+      "reference_valid_for_diode_buck": true,
+      "signed_relative_difference_reference_minus_formula": {
+        "dIL_A": 0.00022227754373410624,
+        "dVo_V": 0.0002704393643482035
+      },
+      "tight_tolerance_relative_change_max": 6.659537146762553e-13,
+      "exceeds_requested_rL": false,
+      "exceeds_requested_rv": false
+    }
+  ]
+}

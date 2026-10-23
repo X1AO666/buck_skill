@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Validated sizing and waveform plot for the assignment's ideal CCM buck model."""
+"""Sizing and approximate ripple plots for the assignment's small-ripple CCM model."""
 import argparse
 import json
 import math
@@ -87,6 +87,30 @@ def design(data, vmin, vmax):
             "worst_L_Vo": vmin,
             "worst_C_Vo": max(points, key=lambda p: p["C_required"])["Vo"]}
 
+def model_assessment(data, result):
+    """Screen approximation assumptions; thresholds are project heuristics, not bounds."""
+    fs, R = float(data['fsw']), float(data['R'])
+    eta = 1/(2*math.pi*fs*result['C_F']*R)
+    max_rv = max(p['rv_actual'] for p in result['points'])
+    # Ripple in v also changes the voltage driving the inductor in each switch state.
+    drive_ratio = max(p['dVo']/min(p['Vo'],float(data['Vin'])-p['Vo']) for p in result['points'])
+    warnings = []
+    if max_rv > .05:
+        warnings.append('Predicted output ripple exceeds 5% p-p: small-output-ripple approximation may be poor.')
+    if eta > .1:
+        warnings.append('Capacitor impedance/load resistance exceeds 0.1 at fsw: neglecting AC load current may be inaccurate.')
+    if drive_ratio > .1:
+        warnings.append('Output ripple exceeds 10% of the smaller nominal inductor drive voltage: triangular-current approximation may be poor, especially near dropout.')
+    if float(data['rL']) >= 1.8:
+        warnings.append('rL is near the CCM boundary: a positive valley in the approximate model does not establish CCM in the coupled circuit.')
+    return {'model':'small-ripple CCM approximation; not the full switched-circuit solution',
+            'status':'needs_independent_validation' if warnings else 'screening_passed_not_validated',
+            'Zc_over_R_at_fsw':eta, 'max_predicted_rv':max_rv,
+            'max_ripple_over_nominal_inductor_drive':drive_ratio,
+            'screening_thresholds':{'rv_pp':.05,'Zc_over_R':.1,'ripple_over_drive':.1,'rL_near_CCM':1.8},
+            'threshold_basis':'project screening heuristics, not manufacturer guarantees or universal error bounds',
+            'warnings':warnings}
+
 def make_plot(data, result, vmin, vmax, outdir):
     import numpy as np
     import matplotlib
@@ -108,7 +132,8 @@ def make_plot(data, result, vmin, vmax, outdir):
         phase = np.mod(cycles, 1.0)
         tri = np.where(phase < d, -dil/2 + (dil/d)*phase, dil/2 - (dil/(1-d))*(phase-d))
         il = io + tri
-        # Exact integral of triangular capacitor current, periodic with zero time mean.
+        # Analytic integral of an assumed triangular iC, with zero mean.
+        # It neglects AC load current and inductor-voltage coupling; not an exact circuit solution.
         charge = np.where(phase < d,
             -dil*phase/2 + dil*phase**2/(2*d),
             dil*(phase-d)/2 - dil*(phase-d)**2/(2*(1-d)))
@@ -116,8 +141,11 @@ def make_plot(data, result, vmin, vmax, outdir):
         vr = (charge-mean_charge)*period/C*1000
         dvo = dil/(8*fs*C)
         axes[0].plot(t*1e6, il, color=color, label=f"{label}: ΔIL={dil:.4g} A p-p")
-        axes[1].plot(t*1e6, vr, color=color, label=f"{label}: ideal ΔVo≈{dvo*1000:.4g} mV p-p")
-    axes[0].set_title("Buck Converter Inductor Current and Output Ripple")
+        axes[1].plot(t*1e6, vr, color=color, label=f"{label}: approx. ΔVo≈{dvo*1000:.4g} mV p-p")
+    title = "Buck Converter: Small-Ripple CCM Approximation"
+    if model_assessment(data, result)['warnings']:
+        title += "\nModel screening warning - independent validation needed"
+    axes[0].set_title(title)
     axes[0].set_ylabel("Inductor current iL (A)")
     axes[1].set_ylabel("Output ripple vo(t) − Vo (mV)")
     axes[1].set_xlabel("Time (µs)")
@@ -138,11 +166,15 @@ def main():
             data=json.load(f)
         vmin,vmax=validate(data)
         result=design(data,vmin,vmax)
+        assessment=model_assessment(data,result)
+        for warning in assessment['warnings']:
+            print(f'MODEL WARNING: {warning}',file=sys.stderr)
         plot=make_plot(data,result,vmin,vmax,args.output_dir)
         print(json.dumps({"status":"ok","inputs":data,"interpreted":{"Vo_min_V":vmin,"Vo_max_V":vmax},
             "L_H":result["L_H"],"C_F":result["C_F"],"worst_L_Vo_V":result["worst_L_Vo"],
             "worst_C_Vo_V":result["worst_C_Vo"],"points":result["points"],"plot":plot,
-            "assumptions":["ideal switch, diode, and inductor","steady state","CCM","capacitor ESR/ESL ignored"]},indent=2))
+            "model_assessment":assessment,
+            "assumptions":["ideal switch, diode, and inductor","steady state","CCM assumed under small-ripple approximation","AC load-current ripple neglected in sizing/plot","capacitor ESR/ESL ignored"]},indent=2))
     except (ValueError, OSError, ArithmeticError, ImportError) as e:
         print(f"ERROR: {e}", file=sys.stderr)
         sys.exit(2)

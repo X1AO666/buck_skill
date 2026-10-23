@@ -47,6 +47,16 @@ class DesignTests(unittest.TestCase):
         self.assertAlmostEqual(r['L_H'],112.5e-6)
         self.assertAlmostEqual(r['C_F'],1/240000)
 
+    def test_model_screening_is_not_input_rejection(self):
+        normal=buck.model_assessment(BASE,self.result(BASE))
+        self.assertEqual(normal['warnings'],[])
+        self.assertEqual(normal['status'],'screening_passed_not_validated')
+        for data in ({**BASE,'rv':.2},{**BASE,'rL':1.999},
+                     {**BASE,'Vo_min':23.9,'Vo_max':23.9}):
+            assessment=buck.model_assessment(data,self.result(data))
+            self.assertTrue(assessment['warnings'])
+            self.assertEqual(assessment['status'],'needs_independent_validation')
+
     def test_missing_multiple(self):
         with self.assertRaises(ValueError) as ctx:
             buck.validate({k:v for k,v in BASE.items() if k not in ('fsw','rv')})

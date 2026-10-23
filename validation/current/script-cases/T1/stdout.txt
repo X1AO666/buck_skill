@@ -1,0 +1,67 @@
+{
+  "status": "ok",
+  "inputs": {
+    "Vin": 24,
+    "R": 3,
+    "Vo_min": 6,
+    "Vo_max": 12,
+    "fsw": 100000,
+    "rL": 0.3,
+    "rv": 0.01
+  },
+  "interpreted": {
+    "Vo_min_V": 6,
+    "Vo_max_V": 12
+  },
+  "L_H": 7.5e-05,
+  "C_F": 1.2500000000000002e-05,
+  "worst_L_Vo_V": 6,
+  "worst_C_Vo_V": 6,
+  "points": [
+    {
+      "Vo": 6,
+      "D": 0.25,
+      "Io": 2.0,
+      "dIL": 0.6000000000000001,
+      "C_required": 1.2500000000000002e-05,
+      "rL_actual": 0.30000000000000004,
+      "dVo": 0.06,
+      "rv_actual": 0.01,
+      "P": 12.0
+    },
+    {
+      "Vo": 12,
+      "D": 0.5,
+      "Io": 4.0,
+      "dIL": 0.8,
+      "C_required": 8.333333333333334e-06,
+      "rL_actual": 0.2,
+      "dVo": 0.07999999999999999,
+      "rv_actual": 0.006666666666666665,
+      "P": 48.0
+    }
+  ],
+  "plot": "D:\\buck-inductor-design\\validation\\current\\script-cases\\T1\\buck_waveforms.png",
+  "model_assessment": {
+    "model": "small-ripple CCM approximation; not the full switched-circuit solution",
+    "status": "screening_passed_not_validated",
+    "Zc_over_R_at_fsw": 0.042441318157838755,
+    "max_predicted_rv": 0.01,
+    "max_ripple_over_nominal_inductor_drive": 0.01,
+    "screening_thresholds": {
+      "rv_pp": 0.05,
+      "Zc_over_R": 0.1,
+      "ripple_over_drive": 0.1,
+      "rL_near_CCM": 1.8
+    },
+    "threshold_basis": "project screening heuristics, not manufacturer guarantees or universal error bounds",
+    "warnings": []
+  },
+  "assumptions": [
+    "ideal switch, diode, and inductor",
+    "steady state",
+    "CCM assumed under small-ripple approximation",
+    "AC load-current ripple neglected in sizing/plot",
+    "capacitor ESR/ESL ignored"
+  ]
+}

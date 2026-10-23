@@ -1,0 +1,1 @@
+ERROR: Impossible buck-converter range: Vo_max=30 V must be less than Vin=24 V.

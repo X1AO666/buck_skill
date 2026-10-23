@@ -1,0 +1,1 @@
+python "D:/buck-inductor-design/scripts/design_buck.py" --input "D:/buck-inductor-design/validation/current/fresh-sessions/F3/input.json" --output-dir "D:/buck-inductor-design/validation/current/fresh-sessions/F3"

@@ -1,36 +1,35 @@
-# Test log
+# 当前版本测试总入口
 
-The cases below were executed with `scripts/design_buck.py`. The script's own diagnostics are shown; unrelated Python launcher startup warnings are omitted.
+版本：2026-10-23 模型适用性修订。旧证据保留在 [history/](history/README.md)，没有把旧 AI 回复改写为本轮实验。
 
-## T1 — complete public prompt
-- **Result:** Pass
-- **Reason:** Complete valid inputs calculate successfully and generate a PNG plot.
-- **Exit code:** `0`
-- **Script response:** `SUCCESS: calculated L=7.5e-05 H, C=1.25e-05 F; plot=/mnt/data/buck-inductor-design/output/buck_waveforms.png`
+## 1. 公式与程序行为回归
 
-## T2 — missing switching frequency
-- **Result:** Pass
-- **Reason:** The script stops and identifies fsw as missing; it does not assume a default.
-- **Exit code:** `2`
-- **Script response:** `ERROR: Missing required input(s): fsw. No calculation performed.`
+[实际执行结果](validation/current/regression.txt)：12 个测试方法通过，含空值/缺键校验、单位数值类型、功率输入、单点、不同工作目录、模型警告、绘图幅值和周期性，以及 100 组设计的 10100 个公式模型工作点检查。这部分主要验证公式实现一致性，不能独立证明模型物理精度。
 
-## T3 — impossible public prompt
-- **Result:** Pass
-- **Reason:** The script rejects Vo,max = 30 V because it exceeds Vin = 24 V.
-- **Exit code:** `2`
-- **Script response:** `ERROR: Impossible buck-converter range: Vo_max=30 V must be less than Vin=24 V.`
+[公开及自拟脚本用例](validation/current/script-cases/executions.json)：T1–T5 的输入、命令、退出码、stdout/stderr 和 T1 PNG 均保留。它们是脚本实验，不能替代 AI 回复记录。
 
-## Invented test — inconsistent voltage/power ranges
-- **Result:** Pass
-- **Reason:** The script stops when the supplied power endpoint disagrees with Vo²/R.
-- **Exit code:** `2`
-- **Script response:** `ERROR: Inconsistent voltage and power ranges at maximum endpoint: Vo^2/R=48 W but supplied P=50 W.`
+## 2. 独立耦合开关电路对照
 
-## Invented test — rL = 2.0
-- **Result:** Pass
-- **Reason:** The script rejects rL ≥ 2, which violates the assignment's CCM condition.
-- **Exit code:** `2`
-- **Script response:** `ERROR: rL must be less than 2 for the stated CCM requirement; received 2.0.`
+[物理对照报告](validation/current/physics/REPORT.md)；[原始数值结果](validation/current/physics/summary.json)；[数值方法测试](validation/current/switched-tests.txt)。8 组参数、共 15 个端点候选对照，包含正常小纹波、大纹波、接近输入电压和接近 CCM 边界的案例。
 
-## Reflection on testing
-Failure cases were run as well as the complete case. The missing-input test confirms that the script refuses to guess a switching frequency; the other failure cases confirm that it does not proceed with impossible or inconsistent specifications.
+这是独立于三角波假设的耦合状态方程数值解。它不是 SPICE 或硬件实验，也不证明整个连续范围或实际元件选型合格。
+
+## 3. 三个新会话的 AI 行为测试
+
+分别启动三个独立代理，每个不继承主聊天历史，只显式读取当前 skill 并处理一个问题。三个会话使用同一继承模型配置，没有跨模型或重复试验；不宣称测试了宿主自动发现。
+
+| 会话 | 问题类型 | 本轮判定 | 完整实际回复 |
+|---|---|---|---|
+| F1 | 中文单位、正常输入 | Pass：正确计算并说明近似 | [回复](validation/current/fresh-sessions/F1/reply.md) |
+| F2 | 同时缺少频率和电压纹波比 | Pass：一次列全并追问，未计算 | [回复](validation/current/fresh-sessions/F2/reply.md) |
+| F3 | 输出电压纹波 20% | Pass：运行公式并披露全部模型警告，没有称为有效物理设计 | [回复](validation/current/fresh-sessions/F3/reply.md) |
+
+每个文件夹含原始提问及实际工具证据。通过仅针对这三道显式调用题，不是 AI 总体准确率 100%，也不是此前八题的重新运行。
+
+## 4. 可复现与版本标识
+
+- [当前源文件哈希和运行环境](validation/current/manifest.json)
+- [skill 格式校验](validation/current/skill-validation.txt)
+- [近似条件及筛查值](references/model_scope.md)
+
+基础回归：`python tests/test_design.py`；可选物理方法测试：`python tests/test_switched.py`；物理对照：`python tests/run_physics_suite.py --output-dir <new-output-dir>`。AI 回复是本次真实会话的证据，运行这些 Python 命令不会生成新的 AI 实验。

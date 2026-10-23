@@ -1,0 +1,71 @@
+{
+  "status": "ok",
+  "inputs": {
+    "Vin": 24,
+    "R": 3,
+    "Vo_min": 6,
+    "Vo_max": 12,
+    "fsw": 100000,
+    "rL": 0.3,
+    "rv": 0.2
+  },
+  "interpreted": {
+    "Vo_min_V": 6,
+    "Vo_max_V": 12
+  },
+  "L_H": 7.5e-05,
+  "C_F": 6.25e-07,
+  "worst_L_Vo_V": 6,
+  "worst_C_Vo_V": 6,
+  "points": [
+    {
+      "Vo": 6,
+      "D": 0.25,
+      "Io": 2.0,
+      "dIL": 0.6000000000000001,
+      "C_required": 6.25e-07,
+      "rL_actual": 0.30000000000000004,
+      "dVo": 1.2000000000000002,
+      "rv_actual": 0.20000000000000004,
+      "P": 12.0
+    },
+    {
+      "Vo": 12,
+      "D": 0.5,
+      "Io": 4.0,
+      "dIL": 0.8,
+      "C_required": 4.1666666666666667e-07,
+      "rL_actual": 0.2,
+      "dVo": 1.6,
+      "rv_actual": 0.13333333333333333,
+      "P": 48.0
+    }
+  ],
+  "plot": "D:/buck-inductor-design/validation/current/fresh-sessions/F3\\buck_waveforms.png",
+  "model_assessment": {
+    "model": "small-ripple CCM approximation; not the full switched-circuit solution",
+    "status": "needs_independent_validation",
+    "Zc_over_R_at_fsw": 0.8488263631567752,
+    "max_predicted_rv": 0.20000000000000004,
+    "max_ripple_over_nominal_inductor_drive": 0.20000000000000004,
+    "screening_thresholds": {
+      "rv_pp": 0.05,
+      "Zc_over_R": 0.1,
+      "ripple_over_drive": 0.1,
+      "rL_near_CCM": 1.8
+    },
+    "threshold_basis": "project screening heuristics, not manufacturer guarantees or universal error bounds",
+    "warnings": [
+      "Predicted output ripple exceeds 5% p-p: small-output-ripple approximation may be poor.",
+      "Capacitor impedance/load resistance exceeds 0.1 at fsw: neglecting AC load current may be inaccurate.",
+      "Output ripple exceeds 10% of the smaller nominal inductor drive voltage: triangular-current approximation may be poor, especially near dropout."
+    ]
+  },
+  "assumptions": [
+    "ideal switch, diode, and inductor",
+    "steady state",
+    "CCM assumed under small-ripple approximation",
+    "AC load-current ripple neglected in sizing/plot",
+    "capacitor ESR/ESL ignored"
+  ]
+}

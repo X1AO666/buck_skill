@@ -1,0 +1,11 @@
+test_large_ripple_can_disagree_materially (__main__.SwitchedTests.test_large_ripple_can_disagree_materially) ... ok
+test_near_dropout_error_is_not_guaranteed_by_small_rv (__main__.SwitchedTests.test_near_dropout_error_is_not_guaranteed_by_small_rv) ... ok
+test_nonpositive_valley_invalidates_diode_CCM (__main__.SwitchedTests.test_nonpositive_valley_invalidates_diode_CCM) ... ok
+test_periodic_state_and_dc_balance (__main__.SwitchedTests.test_periodic_state_and_dc_balance) ... ok
+test_small_ripple_limit (__main__.SwitchedTests.test_small_ripple_limit) ... ok
+test_tighter_tolerance_consistency (__main__.SwitchedTests.test_tighter_tolerance_consistency) ... ok
+
+----------------------------------------------------------------------
+Ran 6 tests in 0.400s
+
+OK

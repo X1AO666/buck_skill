@@ -1,0 +1,68 @@
+{
+  "inputs": {
+    "Vin": 24,
+    "R": 3,
+    "Vo_min": 23.9,
+    "Vo_max": 23.9,
+    "fsw": 100000,
+    "rL": 0.3,
+    "rv": 0.01
+  },
+  "L_H": 4.166666666666763e-07,
+  "C_F": 1.25e-05,
+  "method": "periodic affine matrix exponential + coupled switched ODE DOP853 + derivative-root extrema",
+  "limits": "ideal fixed-duty CCM candidate only; no DCM, control loop, parasitics or hardware validation",
+  "model_assessment": {
+    "model": "small-ripple CCM approximation; not the full switched-circuit solution",
+    "status": "needs_independent_validation",
+    "Zc_over_R_at_fsw": 0.04244131815783876,
+    "max_predicted_rv": 0.010000000000000002,
+    "max_ripple_over_nominal_inductor_drive": 2.3899999999999664,
+    "screening_thresholds": {
+      "rv_pp": 0.05,
+      "Zc_over_R": 0.1,
+      "ripple_over_drive": 0.1,
+      "rL_near_CCM": 1.8
+    },
+    "threshold_basis": "project screening heuristics, not manufacturer guarantees or universal error bounds",
+    "warnings": [
+      "Output ripple exceeds 10% of the smaller nominal inductor drive voltage: triangular-current approximation may be poor, especially near dropout."
+    ]
+  },
+  "points": [
+    {
+      "Vo_V": 23.9,
+      "formula": {
+        "Vo": 23.9,
+        "D": 0.9958333333333332,
+        "Io": 7.966666666666666,
+        "dIL": 2.39,
+        "C_required": 1.25e-05,
+        "rL_actual": 0.30000000000000004,
+        "dVo": 0.23900000000000002,
+        "rv_actual": 0.010000000000000002,
+        "P": 190.4033333333333
+      },
+      "coupled_CCM_candidate": {
+        "mean_i_A": 7.966666666666661,
+        "mean_v_V": 23.899999999999988,
+        "dIL_A": 2.9446327877474623,
+        "dVo_V": 0.42289787710323523,
+        "min_i_A": 6.457331121749393,
+        "rL": 0.36961917837834285,
+        "rv": 0.017694471845323658,
+        "positive_valley": true,
+        "periodic_residual_scaled": 6.020288869933904e-15,
+        "mean_v_relative_error": 4.459473236988076e-16
+      },
+      "reference_valid_for_diode_buck": true,
+      "signed_relative_difference_reference_minus_formula": {
+        "dIL_A": 0.23206392792780842,
+        "dVo_V": 0.7694471845323648
+      },
+      "tight_tolerance_relative_change_max": 2.503497520704467e-14,
+      "exceeds_requested_rL": true,
+      "exceeds_requested_rv": true
+    }
+  ]
+}

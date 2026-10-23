@@ -1,0 +1,67 @@
+[
+  {
+    "case": "T1",
+    "command": [
+      "D:\\Users\\xiaoman\\anaconda3\\python.exe",
+      "D:\\buck-inductor-design\\scripts\\design_buck.py",
+      "--input",
+      "D:\\buck-inductor-design\\tests\\T1.json",
+      "--output-dir",
+      "D:\\buck-inductor-design\\validation\\current\\script-cases\\T1"
+    ],
+    "exit_code": 0,
+    "expected_exit_code": 0
+  },
+  {
+    "case": "T2_missing_frequency",
+    "command": [
+      "D:\\Users\\xiaoman\\anaconda3\\python.exe",
+      "D:\\buck-inductor-design\\scripts\\design_buck.py",
+      "--input",
+      "D:\\buck-inductor-design\\tests\\T2_missing_frequency.json",
+      "--output-dir",
+      "D:\\buck-inductor-design\\validation\\current\\script-cases\\T2_missing_frequency"
+    ],
+    "exit_code": 2,
+    "expected_exit_code": 2
+  },
+  {
+    "case": "T3_impossible_buck",
+    "command": [
+      "D:\\Users\\xiaoman\\anaconda3\\python.exe",
+      "D:\\buck-inductor-design\\scripts\\design_buck.py",
+      "--input",
+      "D:\\buck-inductor-design\\tests\\T3_impossible_buck.json",
+      "--output-dir",
+      "D:\\buck-inductor-design\\validation\\current\\script-cases\\T3_impossible_buck"
+    ],
+    "exit_code": 2,
+    "expected_exit_code": 2
+  },
+  {
+    "case": "T4_inconsistent_ranges",
+    "command": [
+      "D:\\Users\\xiaoman\\anaconda3\\python.exe",
+      "D:\\buck-inductor-design\\scripts\\design_buck.py",
+      "--input",
+      "D:\\buck-inductor-design\\tests\\T4_inconsistent_ranges.json",
+      "--output-dir",
+      "D:\\buck-inductor-design\\validation\\current\\script-cases\\T4_inconsistent_ranges"
+    ],
+    "exit_code": 2,
+    "expected_exit_code": 2
+  },
+  {
+    "case": "T5_invalid_ripple_ratio",
+    "command": [
+      "D:\\Users\\xiaoman\\anaconda3\\python.exe",
+      "D:\\buck-inductor-design\\scripts\\design_buck.py",
+      "--input",
+      "D:\\buck-inductor-design\\tests\\T5_invalid_ripple_ratio.json",
+      "--output-dir",
+      "D:\\buck-inductor-design\\validation\\current\\script-cases\\T5_invalid_ripple_ratio"
+    ],
+    "exit_code": 2,
+    "expected_exit_code": 2
+  }
+]

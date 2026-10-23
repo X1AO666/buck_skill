@@ -1,0 +1,75 @@
+{
+  "date_local": "2026-10-23",
+  "timezone": "Asia/Shanghai",
+  "source_sha256": {
+    "SKILL.md": "4a082174d42f9180c657085ac41e7f7af992ccdf64c0eeeed448c8d7438f152d",
+    "scripts\\design_buck.py": "2a6a3346a42ec77e9b5c04b3085bff1e195d37fa9624cb1ac2a06762ee064449",
+    "scripts\\compare_switched.py": "a90844e46b5e549807ab4a82425c233af88729881d295f793dcc474d4d935565",
+    "tests\\test_design.py": "63cc9ce2d9cd2842955cab8b8518e748e66a5fc82d46b810ebbf219214d41499",
+    "tests\\test_switched.py": "aff3bd7fff3da9bcfc58d721c4a5fa4cf254862723d975a5c35786c5c711c470",
+    "tests\\run_physics_suite.py": "ae6f9106886b8d82935f8a3e12c5f351c1ed1dc683acca21a1a5a13f2dd37200"
+  },
+  "environment": {
+    "python": "3.11.5 | packaged by Anaconda, Inc. | (main, Sep 11 2023, 13:26:23) [MSC v.1916 64 bit (AMD64)]",
+    "platform": "Windows-10-10.0.19045-SP0",
+    "numpy": "1.24.3",
+    "scipy": "1.11.1",
+    "matplotlib": "3.7.2"
+  },
+  "executions": [
+    {
+      "command": [
+        "D:\\Users\\xiaoman\\anaconda3\\python.exe",
+        "D:\\buck-inductor-design\\tests\\test_design.py"
+      ],
+      "cwd": "D:\\buck-inductor-design",
+      "exit_code": 0,
+      "expected": 0,
+      "evidence": "validation\\current\\regression.txt"
+    },
+    {
+      "command": [
+        "D:\\Users\\xiaoman\\anaconda3\\python.exe",
+        "D:\\buck-inductor-design\\tests\\test_switched.py"
+      ],
+      "cwd": "D:\\buck-inductor-design",
+      "exit_code": 0,
+      "expected": 0,
+      "evidence": "validation\\current\\switched-tests.txt"
+    },
+    {
+      "command": [
+        "D:\\Users\\xiaoman\\anaconda3\\python.exe",
+        "-X",
+        "utf8",
+        "C:/Users/xiaoman/.codex/skills/.system/skill-creator/scripts/quick_validate.py",
+        "D:\\buck-inductor-design"
+      ],
+      "cwd": "D:\\buck-inductor-design",
+      "exit_code": 0,
+      "expected": 0,
+      "evidence": "validation\\current\\skill-validation.txt"
+    },
+    {
+      "command": [
+        "D:\\Users\\xiaoman\\anaconda3\\python.exe",
+        "D:\\buck-inductor-design\\tests\\run_physics_suite.py",
+        "--output-dir",
+        "D:\\buck-inductor-design\\validation\\current\\physics"
+      ],
+      "cwd": "D:\\buck-inductor-design",
+      "exit_code": 0,
+      "expected": 0,
+      "evidence": "validation\\current\\physics\\suite-execution.txt"
+    }
+  ],
+  "AI_tests": {
+    "sessions": 3,
+    "requests_per_session": 1,
+    "parent_history_inherited": false,
+    "explicit_skill_load": true,
+    "model": "same inherited model configuration; no cross-model comparison",
+    "automatic_discovery_tested": false,
+    "repeated_runs_per_case": 1
+  }
+}
