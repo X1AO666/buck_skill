@@ -1,0 +1,51 @@
+{
+  "status": "ok",
+  "inputs": {
+    "Vin": 48,
+    "R": 6,
+    "Vo_min": 12,
+    "Vo_max": 24,
+    "fsw": 200000,
+    "rL": 0.2,
+    "rv": 0.005
+  },
+  "interpreted": {
+    "Vo_min_V": 12,
+    "Vo_max_V": 24
+  },
+  "L_H": 0.0001125,
+  "C_F": 4.166666666666667e-06,
+  "worst_L_Vo_V": 12,
+  "worst_C_Vo_V": 12,
+  "points": [
+    {
+      "Vo": 12,
+      "D": 0.25,
+      "Io": 2.0,
+      "dIL": 0.4,
+      "C_required": 4.166666666666667e-06,
+      "rL_actual": 0.2,
+      "dVo": 0.06,
+      "rv_actual": 0.005,
+      "P": 24.0
+    },
+    {
+      "Vo": 24,
+      "D": 0.5,
+      "Io": 4.0,
+      "dIL": 0.5333333333333333,
+      "C_required": 2.777777777777778e-06,
+      "rL_actual": 0.13333333333333333,
+      "dVo": 0.08,
+      "rv_actual": 0.0033333333333333335,
+      "P": 96.0
+    }
+  ],
+  "plot": "C:/Users/xiaoman/Documents/Codex/2026-10-23/https-gitee-com-blancas-buck-design-3/work/independent-behavior/B3\\buck_waveforms.png",
+  "assumptions": [
+    "ideal switch, diode, and inductor",
+    "steady state",
+    "CCM",
+    "capacitor ESR/ESL ignored"
+  ]
+}

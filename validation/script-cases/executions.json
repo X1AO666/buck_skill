@@ -1,0 +1,67 @@
+[
+  {
+    "case": "T1",
+    "command": [
+      "D:\\Users\\xiaoman\\anaconda3\\python.exe",
+      "C:\\Users\\xiaoman\\Documents\\Codex\\2026-10-23\\https-gitee-com-blancas-buck-design-3\\outputs\\buck-inductor-design\\scripts\\design_buck.py",
+      "--input",
+      "C:\\Users\\xiaoman\\Documents\\Codex\\2026-10-23\\https-gitee-com-blancas-buck-design-3\\outputs\\buck-inductor-design\\tests\\T1.json",
+      "--output-dir",
+      "C:\\Users\\xiaoman\\Documents\\Codex\\2026-10-23\\https-gitee-com-blancas-buck-design-3\\outputs\\buck-inductor-design\\validation\\script-cases\\T1"
+    ],
+    "exit_code": 0,
+    "expected_exit_code": 0
+  },
+  {
+    "case": "T2_missing_frequency",
+    "command": [
+      "D:\\Users\\xiaoman\\anaconda3\\python.exe",
+      "C:\\Users\\xiaoman\\Documents\\Codex\\2026-10-23\\https-gitee-com-blancas-buck-design-3\\outputs\\buck-inductor-design\\scripts\\design_buck.py",
+      "--input",
+      "C:\\Users\\xiaoman\\Documents\\Codex\\2026-10-23\\https-gitee-com-blancas-buck-design-3\\outputs\\buck-inductor-design\\tests\\T2_missing_frequency.json",
+      "--output-dir",
+      "C:\\Users\\xiaoman\\Documents\\Codex\\2026-10-23\\https-gitee-com-blancas-buck-design-3\\outputs\\buck-inductor-design\\validation\\script-cases\\T2_missing_frequency"
+    ],
+    "exit_code": 2,
+    "expected_exit_code": 2
+  },
+  {
+    "case": "T3_impossible_buck",
+    "command": [
+      "D:\\Users\\xiaoman\\anaconda3\\python.exe",
+      "C:\\Users\\xiaoman\\Documents\\Codex\\2026-10-23\\https-gitee-com-blancas-buck-design-3\\outputs\\buck-inductor-design\\scripts\\design_buck.py",
+      "--input",
+      "C:\\Users\\xiaoman\\Documents\\Codex\\2026-10-23\\https-gitee-com-blancas-buck-design-3\\outputs\\buck-inductor-design\\tests\\T3_impossible_buck.json",
+      "--output-dir",
+      "C:\\Users\\xiaoman\\Documents\\Codex\\2026-10-23\\https-gitee-com-blancas-buck-design-3\\outputs\\buck-inductor-design\\validation\\script-cases\\T3_impossible_buck"
+    ],
+    "exit_code": 2,
+    "expected_exit_code": 2
+  },
+  {
+    "case": "T4_inconsistent_ranges",
+    "command": [
+      "D:\\Users\\xiaoman\\anaconda3\\python.exe",
+      "C:\\Users\\xiaoman\\Documents\\Codex\\2026-10-23\\https-gitee-com-blancas-buck-design-3\\outputs\\buck-inductor-design\\scripts\\design_buck.py",
+      "--input",
+      "C:\\Users\\xiaoman\\Documents\\Codex\\2026-10-23\\https-gitee-com-blancas-buck-design-3\\outputs\\buck-inductor-design\\tests\\T4_inconsistent_ranges.json",
+      "--output-dir",
+      "C:\\Users\\xiaoman\\Documents\\Codex\\2026-10-23\\https-gitee-com-blancas-buck-design-3\\outputs\\buck-inductor-design\\validation\\script-cases\\T4_inconsistent_ranges"
+    ],
+    "exit_code": 2,
+    "expected_exit_code": 2
+  },
+  {
+    "case": "T5_invalid_ripple_ratio",
+    "command": [
+      "D:\\Users\\xiaoman\\anaconda3\\python.exe",
+      "C:\\Users\\xiaoman\\Documents\\Codex\\2026-10-23\\https-gitee-com-blancas-buck-design-3\\outputs\\buck-inductor-design\\scripts\\design_buck.py",
+      "--input",
+      "C:\\Users\\xiaoman\\Documents\\Codex\\2026-10-23\\https-gitee-com-blancas-buck-design-3\\outputs\\buck-inductor-design\\tests\\T5_invalid_ripple_ratio.json",
+      "--output-dir",
+      "C:\\Users\\xiaoman\\Documents\\Codex\\2026-10-23\\https-gitee-com-blancas-buck-design-3\\outputs\\buck-inductor-design\\validation\\script-cases\\T5_invalid_ripple_ratio"
+    ],
+    "exit_code": 2,
+    "expected_exit_code": 2
+  }
+]

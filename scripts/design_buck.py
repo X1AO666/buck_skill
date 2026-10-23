@@ -11,18 +11,19 @@ def finite_positive(name, value):
         raise ValueError(f"{name} must be a finite positive number; received {value!r}.")
 
 def validate(data):
+    if not isinstance(data, dict):
+        raise ValueError("Input must be a JSON object.")
     required = ["Vin", "R", "fsw", "rL", "rv"]
     missing = [k for k in required if k not in data or data[k] is None]
     has_v = ("Vo_min" in data and data.get("Vo_min") is not None and
              "Vo_max" in data and data.get("Vo_max") is not None)
     has_p = ("P_min" in data and data.get("P_min") is not None and
              "P_max" in data and data.get("P_max") is not None)
-    partial_v = (("Vo_min" in data) != ("Vo_max" in data))
-    partial_p = (("P_min" in data) != ("P_max" in data))
-    if partial_v:
-        missing.append("Vo_min or Vo_max (both endpoints are required)")
-    if partial_p:
-        missing.append("P_min or P_max (both endpoints are required)")
+    partial_v = any(k in data for k in ("Vo_min", "Vo_max")) and not has_v
+    partial_p = any(k in data for k in ("P_min", "P_max")) and not has_p
+    for keys, partial in [(("Vo_min", "Vo_max"), partial_v), (("P_min", "P_max"), partial_p)]:
+        if partial:
+            missing.extend(k for k in keys if k not in data or data[k] is None)
     if not has_v and not has_p and not partial_v and not partial_p:
         missing.append("an operating range: Vo_min and Vo_max, or P_min and P_max")
     if missing:
@@ -63,22 +64,27 @@ def design(data, vmin, vmax):
     Vin, R, fs, rL, rv = (float(data[k]) for k in ("Vin", "R", "fsw", "rL", "rv"))
     # ΔIL/Io = R(1-Vo/Vin)/(L fs); the largest requirement is at Vo_min.
     L = R * (1 - vmin/Vin) / (fs*rL)
+    if not math.isfinite(L) or L <= 0:
+        raise ValueError("Derived L is outside the supported numerical range.")
     points = []
     for vo in (vmin, vmax):
         d = vo/Vin
         io = vo/R
         dil = vo*(1-d)/(L*fs)
-        dvo = dil/(8*fs) # numerator; divide by C below
         c_required = dil/(8*fs*rv*vo)
         points.append({"Vo": vo, "D": d, "Io": io, "dIL": dil,
                        "C_required": c_required, "rL_actual": dil/io})
     C = max(p["C_required"] for p in points)
+    if not math.isfinite(C) or C <= 0:
+        raise ValueError("Derived C is outside the supported numerical range.")
     for p in points:
         p["dVo"] = p["dIL"]/(8*fs*C)
         p["rv_actual"] = p["dVo"]/p["Vo"]
         p["P"] = p["Vo"]**2/R
+        if not all(math.isfinite(value) for value in p.values()):
+            raise ValueError("Derived operating point is outside the supported numerical range.")
     return {"L_H": L, "C_F": C, "points": points,
-            "worst_L_Vo": min(points, key=lambda p: p["rL_actual"]-rL)["Vo"] if False else vmin,
+            "worst_L_Vo": vmin,
             "worst_C_Vo": max(points, key=lambda p: p["C_required"])["Vo"]}
 
 def make_plot(data, result, vmin, vmax, outdir):
@@ -90,22 +96,24 @@ def make_plot(data, result, vmin, vmax, outdir):
     Vin, R, fs = float(data["Vin"]), float(data["R"]), float(data["fsw"])
     L, C = result["L_H"], result["C_F"]
     period = 1/fs
-    t = np.linspace(0, 3*period, 1201)
     fig, axes = plt.subplots(2, 1, sharex=True, figsize=(9, 6.5), constrained_layout=True)
     colors = ["tab:blue", "tab:orange"]
     for vo, color, label in zip([vmin, vmax], colors, ["Low-end operating point", "High-end operating point"]):
         d, io = vo/Vin, vo/R
         dil = vo*(1-d)/(L*fs)
         # Steady-state triangular inductor current, centered on Io.
-        phase = np.mod(t, period)/period
+        local = np.unique(np.concatenate([np.linspace(0, d, 201), np.linspace(d, 1, 201), [d/2, (1+d)/2]]))
+        cycles = np.concatenate([local[:-1]+k for k in range(3)] + [np.array([3.0])])
+        t = cycles*period
+        phase = np.mod(cycles, 1.0)
         tri = np.where(phase < d, -dil/2 + (dil/d)*phase, dil/2 - (dil/(1-d))*(phase-d))
         il = io + tri
-        # Capacitor voltage ripple from iC = iL - Io, integrated over each switching period.
-        dt = t[1]-t[0]
-        ic = il-io
-        vraw = np.concatenate([[0.0], np.cumsum((ic[1:]+ic[:-1])*0.5*dt/C)])
-        # Remove mean over full plotted interval to display vo(t)-Vo centered around zero.
-        vr = (vraw - np.mean(vraw))*1000
+        # Exact integral of triangular capacitor current, periodic with zero time mean.
+        charge = np.where(phase < d,
+            -dil*phase/2 + dil*phase**2/(2*d),
+            dil*(phase-d)/2 - dil*(phase-d)**2/(2*(1-d)))
+        mean_charge = dil*(1-2*d)/12
+        vr = (charge-mean_charge)*period/C*1000
         dvo = dil/(8*fs*C)
         axes[0].plot(t*1e6, il, color=color, label=f"{label}: ΔIL={dil:.4g} A p-p")
         axes[1].plot(t*1e6, vr, color=color, label=f"{label}: ideal ΔVo≈{dvo*1000:.4g} mV p-p")
@@ -135,7 +143,7 @@ def main():
             "L_H":result["L_H"],"C_F":result["C_F"],"worst_L_Vo_V":result["worst_L_Vo"],
             "worst_C_Vo_V":result["worst_C_Vo"],"points":result["points"],"plot":plot,
             "assumptions":["ideal switch, diode, and inductor","steady state","CCM","capacitor ESR/ESL ignored"]},indent=2))
-    except (ValueError, OSError, json.JSONDecodeError) as e:
+    except (ValueError, OSError, ArithmeticError, ImportError) as e:
         print(f"ERROR: {e}", file=sys.stderr)
         sys.exit(2)
 

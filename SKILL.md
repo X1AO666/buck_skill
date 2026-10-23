@@ -1,6 +1,6 @@
 ---
 name: buck-inductor-design
-description: Design the inductor and output capacitor of an ideal CCM buck converter when the user requests sizing from a complete, consistent operating range and ripple requirements. Use only after validating every required input; ask for missing values and stop on inconsistent or impossible specifications.
+description: Size inductors and output capacitors for ideal CCM buck converters with fixed input voltage and resistive load, including requests with incomplete inputs. Validate completeness and consistency first; ask for missing or ambiguous values and stop on invalid specifications.
 ---
 
 # Buck Converter Inductor and Capacitor Design
@@ -21,15 +21,23 @@ A single operating point is represented by setting a range's minimum equal to it
 
 ## Ordered procedure
 1. **Check completeness first.** If any required item is missing, list every missing item and ask the user to provide it. Do not calculate, estimate, infer, or assume defaults.
-2. **Parse units and ratios.** Convert kHz to Hz and percentages to fractions. If a value is ambiguous, ask a question rather than guessing.
+2. **Parse units and ratios.** Convert kHz to Hz and percentages to fractions. Explicit natural-language equivalents such as “十万赫兹” = 100000 Hz and “百分之三十” = 0.30 are values, not defaults. A bare `30` is not automatically `30%`; ask if intent or units are ambiguous. List all missing items together. A null endpoint counts as missing even when its key exists. Ask the user to complete or withdraw an incomplete additional range rather than ignoring its supplied values.
 3. **Check basic validity.** All numeric inputs must be finite and strictly positive. Each minimum must be less than or equal to its corresponding maximum. Require `0 < Vo_min <= Vo_max < Vin`. Require `0 < rL < 2` and `rv > 0`. If a supplied power range is used, require `0 < P_min <= P_max`.
 4. **Check range consistency.** When voltage and power ranges are both supplied, verify `P = Vo^2/R` at corresponding endpoints (minimum with minimum and maximum with maximum) within a relative tolerance of 1e-6. If they disagree, stop and explain the conflict.
 5. **Do not silently repair bad inputs.** Do not swap minimum and maximum, clamp output voltage to `Vin`, reinterpret a percentage as a whole number, or select an unstated operating range.
 6. **Determine the operating range.** If only power is supplied, derive voltage endpoints using `Vo = sqrt(P R)`. If both ranges are supplied and consistent, use the voltage range.
-7. **Compute the design using the calculation script.** Run `python scripts/design_buck.py --input tests/T1.json --output-dir output` for the bundled T1 example, or create a JSON input file with the user's validated values. Do not perform the final arithmetic mentally or invent script output.
+7. **Compute the design using the calculation script.** Let `SKILL_DIR` be the absolute directory containing this loaded `SKILL.md`, not the current working directory. Create a JSON input in the task workspace using the schema below, then run the equivalent of `python "<SKILL_DIR>/scripts/design_buck.py" --input "<absolute-input.json>" --output-dir "<absolute-output-directory>"`. Quote paths with spaces. Never reuse T1 values for another request. Requires Python 3.10+, NumPy and Matplotlib; report unavailable dependencies without inventing results. Read stdout JSON and verify exit code 0 before reporting success. Do not perform the final arithmetic mentally or invent script output.
 8. **Explain the worst case.** Report the interpreted inputs and units, minimum L and C, the worst-case operating point for each constraint, the calculated peak-to-peak ripples, and assumptions.
 9. **Create the required plot.** The plot must have a 2×1 layout with shared time axis, show three steady-state switching periods in microseconds, plot inductor current on top and output ripple `vo(t)-Vo` in mV on bottom, show both range endpoints in different colors with a legend, and include computed `ΔIL` and `ΔVo` in the legend or on the plot. Save as PNG.
 10. **Report limits.** State that the results use the assignment's ideal-switch, ideal-diode, ideal-inductor, steady-state, CCM assumptions and ignore capacitor ESR/ESL. Do not imply the design is validated for real component tolerances, losses, transient response, or thermal limits.
+
+## Script input schema
+Use a JSON object with numeric SI-unit fields `Vin`, `R`, `fsw`, `rL`, `rv`, and either the pair `Vo_min`, `Vo_max` or `P_min`, `P_max`. Both complete pairs are allowed. Ratios are fractions. Omit unused ranges entirely instead of sending null placeholders. The script does not parse human-language units; resolve ambiguity before constructing JSON.
+
+Bundled public test example only:
+```json
+{"Vin":24,"R":3,"Vo_min":6,"Vo_max":12,"fsw":100000,"rL":0.30,"rv":0.01}
+```
 
 ## Reference equations
 - `D = Vo / Vin`
@@ -40,7 +48,7 @@ A single operating point is represented by setting a range's minimum equal to it
 - CCM condition: `Io - ΔIL/2 > 0`
 - `rL = ΔIL / Io`, `rv = ΔVo / Vo`
 
-For a voltage-range input, the minimum inductance is selected so `ΔIL / Io <= rL` at every operating point. With fixed R, the limiting L is at `Vo_min`. Then select the minimum C so `ΔVo / Vo <= rv` at every operating point using the selected L.
+For a voltage-range input, the minimum inductance is selected so `ΔIL / Io <= rL` at every operating point. With fixed R, the limiting L is at `Vo_min`. Then select the minimum C so `ΔVo / Vo <= rv` at every operating point using the selected L. These are sequential minima: increasing L can permit a smaller C, so do not claim independent global minima.
 
 ## Stop and refusal rules
 - Missing required inputs: ask for them and do not calculate.

@@ -1,0 +1,41 @@
+[
+  {
+    "case": "B1",
+    "executable": "D:\\Users\\xiaoman\\anaconda3\\python.exe",
+    "arguments": [
+      "C:/Users/xiaoman/Documents/Codex/2026-10-23/https-gitee-com-blancas-buck-design-3/outputs/buck-inductor-design/scripts/design_buck.py",
+      "--input",
+      "C:/Users/xiaoman/Documents/Codex/2026-10-23/https-gitee-com-blancas-buck-design-3/work/independent-behavior/B1-input.json",
+      "--output-dir",
+      "C:/Users/xiaoman/Documents/Codex/2026-10-23/https-gitee-com-blancas-buck-design-3/work/independent-behavior/B1"
+    ],
+    "exit_code": 0,
+    "stdout_file": "B1-stdout.json"
+  },
+  {
+    "case": "B3",
+    "executable": "D:\\Users\\xiaoman\\anaconda3\\python.exe",
+    "arguments": [
+      "C:/Users/xiaoman/Documents/Codex/2026-10-23/https-gitee-com-blancas-buck-design-3/outputs/buck-inductor-design/scripts/design_buck.py",
+      "--input",
+      "C:/Users/xiaoman/Documents/Codex/2026-10-23/https-gitee-com-blancas-buck-design-3/work/independent-behavior/B3-input.json",
+      "--output-dir",
+      "C:/Users/xiaoman/Documents/Codex/2026-10-23/https-gitee-com-blancas-buck-design-3/work/independent-behavior/B3"
+    ],
+    "exit_code": 0,
+    "stdout_file": "B3-stdout.json"
+  },
+  {
+    "case": "B6",
+    "executable": "D:\\Users\\xiaoman\\anaconda3\\python.exe",
+    "arguments": [
+      "C:/Users/xiaoman/Documents/Codex/2026-10-23/https-gitee-com-blancas-buck-design-3/outputs/buck-inductor-design/scripts/design_buck.py",
+      "--input",
+      "C:/Users/xiaoman/Documents/Codex/2026-10-23/https-gitee-com-blancas-buck-design-3/work/independent-behavior/B6-input.json",
+      "--output-dir",
+      "C:/Users/xiaoman/Documents/Codex/2026-10-23/https-gitee-com-blancas-buck-design-3/work/independent-behavior/B6"
+    ],
+    "exit_code": 0,
+    "stdout_file": "B6-stdout.json"
+  }
+]

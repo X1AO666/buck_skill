@@ -1,0 +1,1 @@
+ERROR: Inconsistent voltage and power ranges at maximum endpoint: Vo^2/R=48 W but supplied P=50 W.

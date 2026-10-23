@@ -1,0 +1,16 @@
+test_changed_parameters (__main__.DesignTests.test_changed_parameters) ... ok
+test_cli_from_unrelated_directory (__main__.DesignTests.test_cli_from_unrelated_directory) ... ok
+test_entire_ranges_and_minimality (__main__.DesignTests.test_entire_ranges_and_minimality) ... ok
+test_inconsistent_or_reversed_power (__main__.DesignTests.test_inconsistent_or_reversed_power) ... ok
+test_invalid_inputs (__main__.DesignTests.test_invalid_inputs) ... ok
+test_missing_multiple (__main__.DesignTests.test_missing_multiple) ... ok
+test_null_or_partial_additional_range (__main__.DesignTests.test_null_or_partial_additional_range) ... ok
+test_plot_equations_extremes_and_periodicity (__main__.DesignTests.test_plot_equations_extremes_and_periodicity) ... ok
+test_power_only_and_consistent_ranges (__main__.DesignTests.test_power_only_and_consistent_ranges) ... ok
+test_public_result (__main__.DesignTests.test_public_result) ... ok
+test_single_point (__main__.DesignTests.test_single_point) ... ok
+
+----------------------------------------------------------------------
+Ran 11 tests in 1.681s
+
+OK
